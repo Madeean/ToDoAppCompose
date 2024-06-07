@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">ToDoApp</string>
+  <string name="icon_add_button">Icon add button</string>
+  <string name="search_tasks">Search tasks</string>
 </resources>
