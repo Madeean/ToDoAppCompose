@@ -4,30 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.madeean.todoapp.navigation.SetupNavigation
 import com.madeean.todoapp.ui.theme.ToDoAppTheme
+import com.madeean.todoapp.ui.viewmodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
   private lateinit var navController: NavHostController
+  private val sharedViewModel: SharedViewModel by viewModels()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
       ToDoAppTheme {
         navController = rememberNavController()
-        SetupNavigation(navController =navController)
+        SetupNavigation(navController = navController, sharedViewmodel = sharedViewModel)
       }
     }
   }

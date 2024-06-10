@@ -43,11 +43,37 @@ import com.madeean.todoapp.ui.theme.LARGE_PADDING
 import com.madeean.todoapp.ui.theme.TOP_APP_BAR_HEIGHT
 import com.madeean.todoapp.ui.theme.topAppBarBackgroundColor
 import com.madeean.todoapp.ui.theme.topAppBarContentColor
+import com.madeean.todoapp.ui.viewmodel.SharedViewModel
+import com.madeean.todoapp.util.SearchAppBarState
+import com.madeean.todoapp.util.SearchAppBarState.CLOSED
+import com.madeean.todoapp.util.SearchAppBarState.OPENED
+import com.madeean.todoapp.util.TrailingIconState
+import com.madeean.todoapp.util.TrailingIconState.READY_TO_CLOSE
+import com.madeean.todoapp.util.TrailingIconState.READY_TO_DELETE
 
 @Composable
-fun ListAppBar() {
-//  DefaultListAppBar(onSearchClicked = {}, onSortedClicked = {}, onDeleteClicked = {})
-  SearchAppBar(text = "", onTextChange = {}, onCLoseClicked = {}, onSearchClicked = {})
+fun ListAppBar(
+  sharedViewModel: SharedViewModel,
+  searchAppBarState: SearchAppBarState,
+  searchTextState: String
+) {
+
+  when (searchAppBarState) {
+    CLOSED -> {
+      DefaultListAppBar(onSearchClicked = {
+        sharedViewModel.searchAppBarState.value = OPENED
+      }, onSortedClicked = {}, onDeleteClicked = {})
+    }
+
+    else -> {
+      SearchAppBar(text = searchTextState, onTextChange = {
+        sharedViewModel.searchTextState.value = it
+      }, onCLoseClicked = {
+        sharedViewModel.searchAppBarState.value = CLOSED
+        sharedViewModel.searchTextState.value = ""
+      }, onSearchClicked = {})
+    }
+  }
 }
 
 @Composable
@@ -58,7 +84,7 @@ fun DefaultListAppBar(
 ) {
   TopAppBar(
     title = {
-      Text(text = "Tasks", color = MaterialTheme.colorScheme.topAppBarContentColor)
+      Text(text = stringResource(R.string.tasks), color = MaterialTheme.colorScheme.topAppBarContentColor)
     },
     backgroundColor = MaterialTheme.colorScheme.topAppBarBackgroundColor,
     actions = {
@@ -170,6 +196,10 @@ fun SearchAppBar(
   onSearchClicked: (String) -> Unit
 ) {
 
+  var trailingIconState by remember {
+    mutableStateOf(TrailingIconState.READY_TO_DELETE)
+  }
+
   Surface(
     modifier = Modifier
       .fillMaxWidth()
@@ -203,7 +233,20 @@ fun SearchAppBar(
       },
       trailingIcon = {
         IconButton(onClick = {
-          onCLoseClicked()
+          when(trailingIconState){
+            READY_TO_DELETE -> {
+              onTextChange("")
+              trailingIconState = READY_TO_CLOSE
+            }
+            READY_TO_CLOSE -> {
+              if(text.isNotEmpty()) {
+                onTextChange("")
+              } else{
+                onCLoseClicked()
+                trailingIconState = READY_TO_DELETE
+              }
+            }
+          }
         }) {
           Icon(
             imageVector = Icons.Filled.Close,
