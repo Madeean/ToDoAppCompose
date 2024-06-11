@@ -2,6 +2,7 @@ package com.madeean.todoapp.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -48,12 +49,15 @@ fun PriorityDropDown(
   Row(
     modifier = Modifier
       .fillMaxWidth()
+      .background(MaterialTheme.colorScheme.background)
       .height(PRIORITY_DROPDOWN_HEIGHT)
       .clickable { expanded = true }
       .border(
         width = 1.dp,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+        shape = MaterialTheme.shapes.medium
       ),
+
     verticalAlignment = Alignment.CenterVertically
   ) {
     Canvas(
@@ -66,7 +70,7 @@ fun PriorityDropDown(
     Text(
       modifier = Modifier.weight(8f),
       text = priority.name,
-      style = MaterialTheme.typography.displayMedium
+      style = MaterialTheme.typography.bodyMedium
     )
     IconButton(
       modifier = Modifier
@@ -78,7 +82,7 @@ fun PriorityDropDown(
       Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
     }
 
-    DropdownMenu(modifier = Modifier.fillMaxWidth(),expanded = expanded, onDismissRequest = { expanded = false }) {
+    DropdownMenu(modifier = Modifier.fillMaxWidth(fraction = 0.94f),expanded = expanded, onDismissRequest = { expanded = false }) {
       DropdownMenuItem(onClick = {
         expanded = false
         onPrioritySelected(LOW)

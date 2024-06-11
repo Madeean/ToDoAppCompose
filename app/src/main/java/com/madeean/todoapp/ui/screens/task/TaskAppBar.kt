@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -112,7 +113,7 @@ fun DeleteAction(onDeleteAction: (Action) -> Unit) {
     onDeleteAction(Action.DELETE)
   }) {
     Icon(
-      imageVector = Icons.Filled.Close,
+      imageVector = Icons.Filled.Delete,
       contentDescription = "Delete icon",
       tint = MaterialTheme.colorScheme.topAppBarContentColor
     )
